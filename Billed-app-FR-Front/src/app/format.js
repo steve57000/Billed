@@ -4,10 +4,7 @@ export const formatDate = (dateStr) => {
   const mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(date)
   const da = new Intl.DateTimeFormat('fr', { day: '2-digit' }).format(date)
   const month = mo.charAt(0).toUpperCase() + mo.slice(1)
-  console.log(month.substring(0,3))
-  console.log(`${parseInt(ye.substring(ye.length-2, ye.length))} son type est: ${typeof(parseInt(ye.substring(ye.length-2, ye.length)))}`)
-  console.log(`${parseInt(da)} son type est : ${typeof(parseInt(da))}`)
-  console.log(mo)
+
   return `${parseInt(da)} ${month.substring(0,3)}. ${ye.substring(2, 4)}`
 }
  

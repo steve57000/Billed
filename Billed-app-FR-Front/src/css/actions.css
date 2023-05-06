@@ -1,7 +1,5 @@
-#eye {
-  cursor: pointer;
-}
-
-#download {
+#eye,
+#download,
+#basket {
   cursor: pointer;
 }

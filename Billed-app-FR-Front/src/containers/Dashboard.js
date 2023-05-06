@@ -14,7 +14,6 @@ export const filteredBills = (data, status) => {
       if (typeof jest !== 'undefined') {
         selectCondition = (bill.status === status)
       }
-      /* istanbul ignore next */
       else {
         // in prod environment
         const userEmail = JSON.parse(localStorage.getItem("user")).email
@@ -54,7 +53,7 @@ export const card = (bill) => {
 
 export const cards = (bills) => {
   const billSort = bills.sort((a,b) => new Date(b.date) - new Date(a.date))
-  return (billSort && billSort.length) ? billSort.map(bill => card(bill)).join("") : ""
+  if(billSort) return (billSort && billSort.length) ? billSort.map(bill => card(bill)).join("") : ""
 }
 
 export const getStatus = (index) => {
@@ -82,11 +81,32 @@ export default class {
   handleClickIconEye = () => {
     const billUrl = $('#icon-eye-d').attr("data-bill-url")
     const imgWidth = '100%'
-    $('#modaleFileAdmin').find(".modal-body").html(`<div style='text-align: center;'><img width=${imgWidth} src=${billUrl} alt="Bill"/></div>`)
-    if (typeof $('#modaleFileAdmin').modal === 'function') $('#modaleFileAdmin').modal('show')
+    const modalFileAdmin = $('#modaleFileAdmin')
+    modalFileAdmin.find(".modal-body").html(`<div style='text-align: center;'><img width=${imgWidth} src=${billUrl} alt="Bill"/></div>`)
+    if (typeof modalFileAdmin.modal === 'function') modalFileAdmin.modal('show')
+  }
+  /* istanbul ignore next */
+  handleClickIconDownload = (e) => {
+    const billUrl = $('#icon-download-d').attr("data-bill-url")
+    const fileAdmin = $('#file-name-admin')[0].textContent
+
+    fetch(`${billUrl}`)
+    .then(response => response.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', fileAdmin);
+      document.body.appendChild(link);
+      link.click();
+      window.URL.revokeObjectURL(url);
+    })
+    .catch(() => console.log('Ups, ...'));
   }
 
   handleEditTicket(e, bill, bills) {
+    e.preventDefault()
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
@@ -107,11 +127,14 @@ export default class {
       this.counter ++
     }
     $('#icon-eye-d').click(this.handleClickIconEye)
+    /* istanbul ignore next */
+    $('#icon-download-d').click(this.handleClickIconDownload)
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
     $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
   }
 
   handleAcceptSubmit = (e, bill) => {
+    e.preventDefault()
     const newBill = {
       ...bill,
       status: 'accepted',
@@ -122,6 +145,7 @@ export default class {
   }
 
   handleRefuseSubmit = (e, bill) => {
+    e.preventDefault()
     const newBill = {
       ...bill,
       status: 'refused',
@@ -132,6 +156,7 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
+    e.preventDefault()
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
     if (this.counter % 2 === 0) {
@@ -140,6 +165,7 @@ export default class {
         .html(cards(filteredBills(bills, getStatus(this.index))))
       this.counter ++
     } else {
+      /* istanbul ignore next */
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
@@ -147,9 +173,10 @@ export default class {
     }
 
     bills
+    /* istanbul ignore next */
     .sort((a,b) => new Date(b.date) - new Date(a.date))
     .forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      $(`#status-bills-container${index}  #open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
     return bills

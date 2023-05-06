@@ -85,9 +85,8 @@ const mockedBills = {
 }
 
 export default {
-  bills() {
-    console.log(mockedBills.list())
-    return mockedBills
+   bills() {
+    return  mockedBills
   },
 }
 

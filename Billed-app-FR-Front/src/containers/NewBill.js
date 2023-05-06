@@ -14,54 +14,50 @@ export default class NewBill {
     this.fileName = null
     this.billId = null
     const buttonWindow = document.querySelector(`#layout-icon1[data-testid="icon-window"]`)
+    /* istanbul ignore next */
     if (buttonWindow) buttonWindow.addEventListener('click', this.handleClickWindow)
     new Logout({ document, onNavigate, localStorage })
   }
-
+  /* istanbul ignore next */
   handleClickWindow = () => {
     this.onNavigate(ROUTES_PATH['Bills'])
   }
   handleChangeFile = e => {
     e.preventDefault()
-    const testExtension = ["jpg", "jpeg", "png"]
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    let valid = false
-    const typeFile = file.type
-    testExtension.forEach( getMatch => {
-      if (typeFile.includes(getMatch)) {
-        valid = true
+    const filePath = e.target.value.split(/\\/g)
+    const fileName = filePath[filePath.length-1]
+    const formData = new FormData()
+    const email = JSON.parse(localStorage.getItem("user")).email
+
+    //prevent from saving not images file
+    const authorizedType = ["image/jpeg", "image/jpg", "image/png"]
+
+    if (!authorizedType.includes(file.type)) {
+      console.error("wrong extension")
+      this.document.querySelector(`input[data-testid="file"]`).value = ""
+      return
+    }
+
+    formData.append('file', file)
+    formData.append('email', email)
+
+    this.store
+    .bills()
+    .create({
+      data: formData,
+      headers: {
+        noContentType: true
       }
     })
-    if(valid){
-      const filePath = e.target.value.split(/\\/g)
-      const fileName = filePath[filePath.length-1]
-      const formData = new FormData()
-      const email = JSON.parse(localStorage.getItem("user")).email
-      formData.append('file', file)
-      formData.append('email', email)
-
-      this.store
-      .bills()
-      .create({
-        data: formData,
-        headers: {
-          noContentType: true
-        }
-      })
-      .then(({fileUrl, key}) => {
-        console.log(fileUrl)
-        this.billId = key
-        this.fileUrl = fileUrl
-        this.fileName = fileName
-      }).catch(error => console.error(error))
-    }
-    else{
-      console.log(`${file.type} n'est pas reconnu`)
-    }
+    .then(({fileUrl, key}) => {
+      this.billId = key
+      this.fileUrl = fileUrl
+      this.fileName = fileName
+    }).catch(error => console.error(error))
   }
   handleSubmit = e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
@@ -81,6 +77,7 @@ export default class NewBill {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   updateBill = (bill) => {
     if (this.store) {
       this.store

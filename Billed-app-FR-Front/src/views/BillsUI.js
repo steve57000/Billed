@@ -13,21 +13,21 @@ const row = (bill) => {
       <td>${bill.amount} €</td>
       <td>${bill.status}</td>
       <td>
-        ${Actions(bill.fileUrl)}
+        ${Actions(bill.fileUrl, bill.fileName)}
       </td>
     </tr>
     `)
   }
 
 const rows = (data) => {
-    if(data) {
-        const billSort = data.sort((a, b) => new Date(b.date) - new Date(a.date))
-        return (billSort && billSort.length) ? billSort.map(bill => row(bill)).join("") : ""
-    }
+    return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
 }
 
 export default ({ data: bills, loading, error }) => {
-  
+    if(bills) {
+        const billSort = (a, b) => new Date(b.date) - new Date(a.date)
+        bills.sort(billSort)
+    }
   const modal = () => (`
     <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -35,7 +35,7 @@ export default ({ data: bills, loading, error }) => {
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Justificatif</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true">&times</span>
             </button>
           </div>
           <div class="modal-body">

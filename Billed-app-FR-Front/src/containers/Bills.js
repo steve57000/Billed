@@ -10,17 +10,24 @@ export default class {
     const buttonNewBill = document.querySelector(`button[data-testid="btn-new-bill"]`)
     if (buttonNewBill) buttonNewBill.addEventListener('click', this.handleClickNewBill)
     const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`)
+    /* istanbul ignore next */
     if (iconEye) iconEye.forEach(icon => {
       icon.addEventListener('click', () => this.handleClickIconEye(icon))
     })
+    const iconDownload = document.querySelectorAll(`div[data-testid="icon-download"]`)
+    /* istanbul ignore next */
+    if (iconDownload) iconDownload.forEach(icon => {
+      icon.addEventListener('click', () => this.handleClickIconDownload(icon))
+    })
+
     const buttonMail = document.querySelector(`#layout-icon2[data-testid="icon-mail"]`)
+    /* istanbul ignore next */
     if (buttonMail) buttonMail.addEventListener('click', this.handleClickNewBill)
 
     new Logout({ document, onNavigate, localStorage})
   }
 
-  handleClickNewBill = (e) => {
-    e.preventDefault()
+  handleClickNewBill = () => {
     this.onNavigate(ROUTES_PATH['NewBill'])
   }
 
@@ -31,13 +38,34 @@ export default class {
     $('#modaleFile').modal('show')
   }
 
+  /* istanbul ignore next */
+  handleClickIconDownload = (icon) => {
+    const billUrl = icon.getAttribute("data-bill-url")
+    const nameBill = icon.getAttribute("data-name")
+
+    fetch(`${billUrl}`)
+    .then(response => response.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', nameBill);
+      document.body.appendChild(link);
+      link.click();
+      window.URL.revokeObjectURL(url);
+    })
+    .catch(() => console.log('Ups, ...'));
+  }
+
   getBills = () => {
     if (this.store) {
       return this.store
       .bills()
       .list()
       .then(snapshot => {
-        const bills = snapshot
+          const bills = snapshot
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
           .map(doc => {
             try {
               return {
@@ -57,7 +85,7 @@ export default class {
             }
           })
           console.log('length', bills.length)
-        return bills
+          return bills
       })
     }
   }

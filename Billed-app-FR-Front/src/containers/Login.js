@@ -1,4 +1,3 @@
-
 import { ROUTES_PATH } from '../constants/routes.js'
 export let PREVIOUS_LOCATION = ''
 
@@ -26,12 +25,7 @@ export default class Login {
     this.localStorage.setItem("user", JSON.stringify(user))
     this.login(user)
       .catch(
-        (err) => {
-          console.log('======')
-          console.log('handlesubmit login user: ' + err)
-          console.log('======')
-          this.createUser(user)
-        }
+        () => this.createUser(user)
       )
       .then(() => {
         this.onNavigate(ROUTES_PATH['Bills'])
@@ -53,11 +47,7 @@ export default class Login {
     this.localStorage.setItem("user", JSON.stringify(user))
     this.login(user)
       .catch(
-        (err) => {
-          console.log('======')
-          console.log('handlesubmit login user: ' + err)
-          console.log('======')
-        }
+          () => this.createUser(user)
       )
       .then(() => {
         this.onNavigate(ROUTES_PATH['Dashboard'])
@@ -68,20 +58,15 @@ export default class Login {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   login = (user) => {
-    console.log('======')
-    console.log('login user: ' + JSON.stringify(user))
-    console.log('======')
-    console.log('+++++')
-    console.log(this.store.user)
-    console.log('+++++')
     if (this.store) {
       return this.store
       .login(JSON.stringify({
         email: user.email,
         password: user.password,
       })).then(({jwt}) => {
-        this.localStorage.setItem('jwt', jwt)
+        localStorage.setItem('jwt', jwt)
       })
     } else {
       return null
@@ -89,6 +74,7 @@ export default class Login {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   createUser = (user) => {
     if (this.store) {
       return this.store
