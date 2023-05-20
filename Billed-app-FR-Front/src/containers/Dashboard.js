@@ -52,6 +52,7 @@ export const card = (bill) => {
 }
 
 export const cards = (bills) => {
+  // ajout du trie par date
   const billSort = bills.sort((a,b) => new Date(b.date) - new Date(a.date))
   if(billSort) return (billSort && billSort.length) ? billSort.map(bill => card(bill)).join("") : ""
 }

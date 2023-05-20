@@ -25,6 +25,7 @@ const rows = (data) => {
 
 export default ({ data: bills, loading, error }) => {
     if(bills) {
+        // Trie bill par date
         const billSort = (a, b) => new Date(b.date) - new Date(a.date)
         bills.sort(billSort)
     }
