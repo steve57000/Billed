@@ -30,18 +30,21 @@ export default class NewBill {
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
 
-    //prevent from saving not images file
+    //Bug report file type only jpg, jpeg or png
     const authorizedType = ["image/jpeg", "image/jpg", "image/png"]
-
     if (!authorizedType.includes(file.type)) {
-      console.error("wrong extension")
+      console.error("wrong extension file type: ", file.type)
+      this.document.querySelector(`#file-error`).innerHTML = 'Seul les formats de fichier jpg, jpeg ou png sont accepté'
+      setTimeout(() => {
+        this.document.querySelector(`#file-error`).innerHTML = ''
+      }, 5000)
       this.document.querySelector(`input[data-testid="file"]`).value = ""
       return
     }
-
+    this.document.querySelector(`#file-error`).innerHTML = ''
     formData.append('file', file)
     formData.append('email', email)
-
+    console.log(file.type)
     this.store
     .bills()
     .create({

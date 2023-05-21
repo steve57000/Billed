@@ -1,7 +1,7 @@
-import { formatDate } from '../app/format.js'
+import {formatDate} from '../app/format.js'
 import DashboardFormUI from '../views/DashboardFormUI.js'
 import BigBilledIcon from '../assets/svg/big_billed.js'
-import { ROUTES_PATH } from '../constants/routes.js'
+import {ROUTES_PATH} from '../constants/routes.js'
 import USERS_TEST from '../constants/usersTest.js'
 import Logout from "./Logout.js"
 
@@ -88,6 +88,7 @@ export default class {
   }
   /* istanbul ignore next */
   handleClickIconDownload = (e) => {
+    e.preventDefault()
     const billUrl = $('#icon-download-d').attr("data-bill-url")
     const fileAdmin = $('#file-name-admin')[0].textContent
 
@@ -177,6 +178,7 @@ export default class {
     /* istanbul ignore next */
     .sort((a,b) => new Date(b.date) - new Date(a.date))
     .forEach(bill => {
+      // Bug report Dashboard , status-bills-container has empty
       $(`#status-bills-container${index}  #open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
@@ -190,14 +192,13 @@ export default class {
       .bills()
       .list()
       .then(snapshot => {
-        const bills = snapshot
+        return snapshot
         .map(doc => ({
           id: doc.id,
           ...doc,
           date: doc.date,
           status: doc.status
         }))
-        return bills
       })
       .catch(error => {
         throw error;
