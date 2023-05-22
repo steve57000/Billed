@@ -29,19 +29,19 @@ export default class NewBill {
     const fileName = filePath[filePath.length-1]
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
-
+    const clearErrorMessage = () => {this.document.querySelector(`#file-error`).innerHTML = ''}
     //Bug report file type only jpg, jpeg or png
     const authorizedType = ["image/jpeg", "image/jpg", "image/png"]
     if (!authorizedType.includes(file.type)) {
-      console.error("wrong extension file type: ", file.type)
+      console.error(`wrong extension file type: ${file.type}`)
       this.document.querySelector(`#file-error`).innerHTML = 'Seul les formats de fichier jpg, jpeg ou png sont accepté'
       setTimeout(() => {
-        this.document.querySelector(`#file-error`).innerHTML = ''
+        clearErrorMessage()
       }, 5000)
       this.document.querySelector(`input[data-testid="file"]`).value = ""
       return
     }
-    this.document.querySelector(`#file-error`).innerHTML = ''
+    clearErrorMessage()
     formData.append('file', file)
     formData.append('email', email)
     console.log(file.type)
