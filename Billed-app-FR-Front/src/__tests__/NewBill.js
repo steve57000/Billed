@@ -100,7 +100,7 @@ describe("Given I am connected as an employee", () => {
           },
         })
         // check that the error message is displayed in the console
-        expect(errorSpy).toHaveBeenCalledWith("wrong extension")
+        expect(errorSpy).toHaveBeenCalledWith(`wrong extension file type: ${testFile.type}`)
       })
     })
 
