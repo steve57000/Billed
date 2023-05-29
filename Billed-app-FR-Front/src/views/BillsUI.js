@@ -20,15 +20,12 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
+    if(data) data.sort((a, b) => new Date(b.date) - new Date(a.date))
     return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
 }
 
 export default ({ data: bills, loading, error }) => {
-    if(bills) {
-        // Trie bill par date
-        const billSort = (a, b) => new Date(b.date) - new Date(a.date)
-        bills.sort(billSort)
-    }
+
   const modal = () => (`
     <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

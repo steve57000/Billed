@@ -55,7 +55,6 @@ describe("Given I am connected as an employee", () => {
           localStorage: window.localStorage,
         })
       })
-
       test("Then bills should be ordered from earliest to latest", () => {
         const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
         const antiChrono = (a, b) => ((a < b) ? 1 : -1)
@@ -92,7 +91,6 @@ describe("Given I am connected as an employee", () => {
           })
         })
       })
-
     })
   })
 
@@ -127,6 +125,7 @@ describe("Given I am connected as an employee", () => {
       const getBillsSpy = jest.spyOn(billsObject, "getBills")
       const data = await billsObject.getBills()
       const mockBills = await mockStore.bills().list()
+
       expect(getBillsSpy).toHaveBeenCalled()
       expect(data[0].date).toEqual(formatDate(mockBills[0].date))
       expect(data[0].status).toEqual(formatStatus(mockBills[0].status))

@@ -23,7 +23,6 @@ export default class {
     const buttonMail = document.querySelector(`#layout-icon2[data-testid="icon-mail"]`)
     /* istanbul ignore next */
     if (buttonMail) buttonMail.addEventListener('click', this.handleClickNewBill)
-
     new Logout({ document, onNavigate, localStorage})
   }
 
