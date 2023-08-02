@@ -181,9 +181,7 @@ export default class {
       // Bug report Dashboard , status-bills-container has empty
       $(`#status-bills-container${index}  #open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
-
     return bills
-
   }
 
   getBillsAllUsers = () => {
@@ -205,7 +203,6 @@ export default class {
       })
     }
   }
-
   // not need to cover this function by tests
   /* istanbul ignore next */
   updateBill = (bill) => {
