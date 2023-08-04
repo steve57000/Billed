@@ -34,7 +34,7 @@ export default class NewBill {
     const authorizedType = ["image/jpeg", "image/jpg", "image/png"]
     if (!authorizedType.includes(file.type)) {
       console.error(`wrong extension file type: ${file.type}`)
-      this.document.querySelector(`#file-error`).innerHTML = 'Seul les formats de fichier jpg, jpeg ou png sont accepté'
+      this.document.querySelector(`#file-error`).innerHTML = 'Seul les formats de fichier jpg, jpeg ou png est accepté'
       setTimeout(() => {
         clearErrorMessage()
       }, 5000)
