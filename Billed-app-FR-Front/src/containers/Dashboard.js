@@ -175,11 +175,9 @@ export default class {
     }
 
     bills
-    /* istanbul ignore next */
-    .sort((a,b) => new Date(b.date) - new Date(a.date))
     .forEach(bill => {
       // Bug report Dashboard , status-bills-container has empty
-      $(`#status-bills-container${index}  #open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      $(`#open-bill${bill.id}`).off("click").on("click",((e) => this.handleEditTicket(e, bill, bills)))
     })
     return bills
   }

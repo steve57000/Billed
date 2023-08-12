@@ -95,6 +95,7 @@ describe("Given I am connected as an employee", () => {
   })
 
   // getBill's integration test
+  //Lorsque je navigue sur la page de bills
   describe("When I navigate to bill's page", () => {
     let billsObject
     beforeEach(() => {
@@ -191,6 +192,7 @@ describe("Given I am connected as an employee", () => {
 
       test("fetches messages from an API and fails with 500 message error", async () => {
         // implement the store and set it up to return a Promise.reject() with a new Error("Erreur 500") error
+        //Implémente et configure le store pour renvoyer un Promise.reject() avec une nouvelle erreur 500
         mockStore.bills.mockImplementationOnce(() => {
           return {
             list: () => {
@@ -208,10 +210,12 @@ describe("Given I am connected as an employee", () => {
           response = err
         }
         // Set the error message in the UI to be displayed
+        // défini le message d'erreur à afficher dans l'interface utilisateur
         document.body.innerHTML = BillsUI({ error: response })
         // Find the error message in the UI
         const message = await screen.getByText(/Erreur 500/)
         // Expect the error message to be present in the UI
+        // vérifie si le message d'erreur soit présent dans l'interface utilisateur
         expect(message).toBeTruthy()
       })
     })
